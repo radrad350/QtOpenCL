@@ -1,4 +1,4 @@
-load(qttest_p4.prf)
+#load(qttest_p4.prf)
 TEMPLATE=app
 QT += testlib
 CONFIG += unittest warn_on

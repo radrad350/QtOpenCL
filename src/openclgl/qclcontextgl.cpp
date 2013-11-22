@@ -38,18 +38,25 @@
 ** $QT_END_LICENSE$
 **
 ****************************************************************************/
+/***************************************************************************\
+** LGPL - Modification to build under Qt5.3.0 and Working windows interop.
+** 2014-08-29: Changed Q_WS_X11 to __linux in a few ifdefs. Added QtGlobal 
+** include. Added support for Windows based OpenGL / OpenCL interopt with
+** #elif defined_MSC_VER)
+****************************************************************************/
 
 #include "qclcontextgl.h"
 #include "qcl_gl_p.h"
 #include <QtCore/qdebug.h>
 #include <QtCore/qvarlengtharray.h>
+#include <QtGlobal>
 
 #if !defined(QT_NO_CL_OPENGL)
 #if defined(QT_OPENGL_ES_2)
 #include <EGL/egl.h>
 #elif defined(QT_OPENGL_ES)
 #include <GLES/egl.h>
-#elif defined(Q_WS_X11)
+#elif defined(__linux)
 #include <GL/glx.h>
 #endif
 #endif
@@ -200,7 +207,7 @@ bool QCLContextGL::create(const QCLPlatform &platform)
         properties.append(cl_context_properties(eglGetCurrentContext()));
         hasSharing = true;
     }
-#elif defined(Q_WS_X11)
+#elif defined(__linux)
     if (khrSharing) {
         properties.append(CL_GLX_DISPLAY_KHR);
         properties.append(cl_context_properties(glXGetCurrentDisplay()));
@@ -208,10 +215,19 @@ bool QCLContextGL::create(const QCLPlatform &platform)
         properties.append(cl_context_properties(glXGetCurrentContext()));
         hasSharing = true;
     }
-#else
+#elif defined(_MSC_VER)
     // Needs to be ported to other platforms.
-    if (khrSharing)
+    if (khrSharing) {
+        properties.append(CL_WGL_HDC_KHR);
+        properties.append(cl_context_properties(wglGetCurrentDC()));
+        properties.append(CL_GL_CONTEXT_KHR);
+        properties.append(cl_context_properties(wglGetCurrentContext()));
+//        qWarning() << "QCLContextGL::create: do not know how to enable sharing";
+    }
+#else 
+    if (khrSharing) {
         qWarning() << "QCLContextGL::create: do not know how to enable sharing";
+    }
 #endif
 #endif
 #endif // !QT_NO_CL_OPENGL

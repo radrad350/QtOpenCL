@@ -38,6 +38,11 @@
 ** $QT_END_LICENSE$
 **
 ****************************************************************************/
+/***************************************************************************\
+** LGPL Modification to build under Qt 5.3.0
+** 2014-08-29:  in setArg(int,const QPoint): float values[2] initialization 
+**              changed.
+****************************************************************************/
 
 #ifndef QCLKERNEL_H
 #define QCLKERNEL_H
@@ -389,7 +394,7 @@ inline void QCLKernel::setArg(int index, const QPointF &value)
     if (sizeof(value) == (sizeof(float) * 2)) {
         clSetKernelArg(m_kernelId, index, sizeof(value), &value);
     } else {
-        float values[2] = {value.x(), value.y()};
+        float values[2]; values[0] = value.x(); values[1] =  value.y();
         clSetKernelArg(m_kernelId, index, sizeof(values), values);
     }
 }

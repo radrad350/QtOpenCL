@@ -38,10 +38,18 @@
 ** $QT_END_LICENSE$
 **
 ****************************************************************************/
+/***************************************************************************\
+** LGPL - Modification for Qt 5.3.0 compilation
+** 2014-08-29 : Added ifdef __linux__ include cstring #endif.
+****************************************************************************/
 
 #include "qclvector.h"
 #include "qclcontext.h"
 #include <QtCore/qatomic.h>
+
+#ifdef __linux__
+#include <cstring> //needed for std::memcpy on linux
+#endif
 
 QT_BEGIN_NAMESPACE
 

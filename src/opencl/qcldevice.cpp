@@ -38,6 +38,11 @@
 ** $QT_END_LICENSE$
 **
 ****************************************************************************/
+/***************************************************************************\
+** Modified to build under Qt 5.3.0
+** 2014-08-29: Added casts to enum type for QCLDevice::deviceType(), 
+** floatCapabilities, and doubleCapabilities, and halfFloatCapabilities.
+****************************************************************************/
 
 #include "qcldevice.h"
 #include "qclext_p.h"
@@ -192,7 +197,8 @@ QCLDevice::DeviceTypes QCLDevice::deviceType() const
             != CL_SUCCESS)
         return QCLDevice::DeviceTypes(0);
     else
-        return QCLDevice::DeviceTypes(type);
+        return QCLDevice::DeviceTypes((DeviceType) type);
+
 }
 
 /*!
@@ -673,7 +679,7 @@ QCLDevice::FloatCapabilities QCLDevice::floatCapabilities() const
             != CL_SUCCESS)
         return NotSupported;
     else
-        return QCLDevice::FloatCapabilities(config);
+        return QCLDevice::FloatCapabilities((FloatCapability) config);
 }
 
 /*!
@@ -693,7 +699,7 @@ QCLDevice::FloatCapabilities QCLDevice::doubleCapabilities() const
             != CL_SUCCESS)
         return NotSupported;
     else
-        return QCLDevice::FloatCapabilities(config);
+        return QCLDevice::FloatCapabilities((FloatCapability) config);
 }
 
 /*!
@@ -713,7 +719,7 @@ QCLDevice::FloatCapabilities QCLDevice::halfFloatCapabilities() const
             != CL_SUCCESS)
         return NotSupported;
     else
-        return QCLDevice::FloatCapabilities(config);
+        return QCLDevice::FloatCapabilities((FloatCapability) config);
 }
 
 /*!

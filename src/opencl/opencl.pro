@@ -6,32 +6,32 @@ gcov {
     CONFIG += dll
 }
 CONFIG += warn_on
-win32 { 
+win32 {
     DESTDIR = ../../bin
     !static:DEFINES += QT_MAKEDLL
 }
-else:DESTDIR = ../../lib
-TOP_DIR="$$PWD/../../../../../"
-include($$TOP_DIR/Utilities/opencl.pri)
+else{
+    DESTDIR = ../../lib
+    QMAKE_CXXFLAGS += -fpermissive
+}
 
 QT += concurrent
-#win32 {
-#    !isEmpty(QMAKE_INCDIR_OPENCL) {
-#        QMAKE_CXXFLAGS += "-I$$QMAKE_INCDIR_OPENCL"
-#    }
-#    !isEmpty(QMAKE_LIBDIR_OPENCL) {
-#        LIBS += "-L$$QMAKE_LIBDIR_OPENCL"
-#    }
-#    !isEmpty(QMAKE_LIBS_OPENCL) {
-#        LIBS += "$$QMAKE_LIBS_OPENCL"
-#    } else {
-#        LIBS += -lOpenCL
-#    }
-#}
-
 macx:!opencl_configure {
     LIBS += -framework OpenCL
+} else {
+    !isEmpty(QMAKE_INCDIR_OPENCL) {
+        QMAKE_CXXFLAGS += "-I$$QMAKE_INCDIR_OPENCL"
+    }
+    !isEmpty(QMAKE_LIBDIR_OPENCL) {
+        LIBS += "-L$$QMAKE_LIBDIR_OPENCL"
+    }
+    !isEmpty(QMAKE_LIBS_OPENCL) {
+        LIBS += "$$QMAKE_LIBS_OPENCL"
+    } else {
+        LIBS += -lOpenCL
+    }
 }
+
 
 message($$QMAKE_CXXFLAGS)
 

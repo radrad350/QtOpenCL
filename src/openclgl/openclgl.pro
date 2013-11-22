@@ -12,27 +12,25 @@ win32 {
     !static:DEFINES += QT_MAKEDLL
 }
 else:DESTDIR = ../../lib
-
-TOP_DIR="$$PWD/../../../../../"
-include($$TOP_DIR/Utilities/opencl.pri)
+CONFIG += qtopencl_library
 
 LIBS += -L../../lib -L../../bin
-#win32 {
-#    LIBS += -lQtOpenCL
-#    !isEmpty(QMAKE_INCDIR_OPENCL) {
-#        QMAKE_CXXFLAGS += -I$$QMAKE_INCDIR_OPENCL
-#    }
-#    !isEmpty(QMAKE_LIBDIR_OPENCL) {
-#        LIBS += -L$$QMAKE_LIBDIR_OPENCL
-#    }
-#    !isEmpty(QMAKE_LIBS_OPENCL) {
-#        LIBS += $$QMAKE_LIBS_OPENCL
-#    } else {
-#        LIBS += -lOpenCL
-#    }
-#} else {
+win32 {
     LIBS += -lQtOpenCL
-#}
+    !isEmpty(QMAKE_INCDIR_OPENCL) {
+        QMAKE_CXXFLAGS += -I$$QMAKE_INCDIR_OPENCL
+    }
+    !isEmpty(QMAKE_LIBDIR_OPENCL) {
+        LIBS += -L$$QMAKE_LIBDIR_OPENCL
+    }
+    !isEmpty(QMAKE_LIBS_OPENCL) {
+        LIBS += $$QMAKE_LIBS_OPENCL
+    } else {
+        LIBS += -lOpenCL
+    }
+} else {
+   LIBS += -lQtOpenCL
+}
 macx:!opencl_configure {
     LIBS += -framework OpenCL
 }

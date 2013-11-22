@@ -38,6 +38,10 @@
 ** $QT_END_LICENSE$
 **
 ****************************************************************************/
+/***************************************************************************\
+** LGPL - Modification to work under Qt 5.3.0
+** 2014-08-29:  Modifications adding 8 usages of static_cast<size_t>. 
+****************************************************************************/
 
 #include "qclbuffer.h"
 #include "qclimage.h"
@@ -612,8 +616,10 @@ bool QCLBuffer::copyTo
 bool QCLBuffer::copyTo
     (size_t offset, const QCLImage2D &dest, const QRect &rect)
 {
-    const size_t dst_origin[3] = {rect.x(), rect.y(), 0};
-    const size_t region[3] = {rect.width(), rect.height(), 1};
+    const size_t dst_origin[3] = {static_cast<size_t>(rect.x()),
+                                  static_cast<size_t>(rect.y()), 0};
+    const size_t region[3] = {static_cast<size_t>(rect.width()),
+                              static_cast<size_t>(rect.height()), 1};
     cl_event event;
     cl_int error = clEnqueueCopyBufferToImage
         (context()->activeQueue(), memoryId(), dest.memoryId(),
@@ -698,8 +704,12 @@ QCLEvent QCLBuffer::copyToAsync
     (size_t offset, const QCLImage2D &dest, const QRect &rect,
      const QCLEventList &after)
 {
-    const size_t dst_origin[3] = {rect.x(), rect.y(), 0};
-    const size_t region[3] = {rect.width(), rect.height(), 1};
+//    const size_t dst_origin[3] = {rect.x(), rect.y(), 0};
+//    const size_t region[3] = {rect.width(), rect.height(), 1};
+    const size_t dst_origin[3] = {static_cast<size_t>(rect.x()),
+                                  static_cast<size_t>(rect.y()), 0};
+    const size_t region[3] = {static_cast<size_t>(rect.width()),
+                              static_cast<size_t>(rect.height()), 1};
     cl_event event;
     cl_int error = clEnqueueCopyBufferToImage
         (context()->activeQueue(), memoryId(), dest.memoryId(),
